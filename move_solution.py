@@ -33,7 +33,16 @@ while run:
 		if event.type == pygame.QUIT:
 			run = False    
 	keyQ = pygame.key.get_pressed()
-	
+
+	### Le problème de lenteur semble venir de la réception des touches sur pygame, 
+	# à voir si un autre système de réception des touches règlerait le problème.
+	###
+
+	###
+	# TODO Ajout de la prise en compte de plusieurs touches simultanément (HAUT+DROITE pour aller en diagonale par exemple)
+	###
+
+	### Déplacement du robot avec le clavier ###
 	if keyQ[pygame.K_UP] :
 		avance(robot)
 	if keyQ[pygame.K_DOWN] :
@@ -45,86 +54,35 @@ while run:
 
 	if [keyQ[pygame.K_DOWN], keyQ[pygame.K_UP], keyQ[pygame.K_RIGHT], keyQ[pygame.K_LEFT]] == [0,0,0,0]:
 		stop(robot)
-	
-	"""if(keyQ[pygame.K_DOWN] - keyQ[pygame.K_UP]) == -1:
-		avance(robot)
-	elif keyQ[pygame.K_DOWN] - keyQ[pygame.K_UP] == 1:
-		recule(robot)
-	if keyQ[pygame.K_RIGHT] - keyQ[pygame.K_LEFT] == 1:
-		droite(robot)
-	elif keyQ[pygame.K_RIGHT] - keyQ[pygame.K_LEFT] == -1:
-		gauche(robot)
-	elif [keyQ[pygame.K_DOWN], keyQ[pygame.K_UP], keyQ[pygame.K_RIGHT], keyQ[pygame.K_LEFT]] == [0,0,0,0]:
-		stop(robot)"""
-	
+	######
+
+	### Détection de la luminosité pour envoyer des signals d'alerte en cas de franchissement de zones noires ###	
 	frontLum = robot.getFrontLuminosity()
 	backLum = robot.getBackLuminosity()
 	print("front lum : ", frontLum)
 	print("back lum : ", backLum)
 
-	luminosity = 70
-
+	lumThreshold = 70
 	
-	if(frontLum >= luminosity and backLum >=luminosity):
+	if(frontLum >= lumThreshold and backLum >=lumThreshold):
 		#VERT, OVA est sur la ligne
 		robot.setLedColor(0, 255, 0)
-		print("sur la ligne")
-	elif(frontLum <= luminosity and backLum <=luminosity):
+		print("Est sur la ligne")
+	elif(frontLum <= lumThreshold and backLum <= lumThreshold):
 		robot.setLedColor(255, 0, 0)
-		print("pas sur la ligne")
-		explode = [(880, 1000)]
-		robot.playMelody(explode)
-	elif(frontLum <= luminosity or backLum <=luminosity):
+		print("N'est pas sur la ligne")
+		explodeSong = [(880, 1000)]
+		robot.playMelody(explodeSong)
+	elif(frontLum <= lumThreshold or backLum <=lumThreshold):
 		#BLEU, OVA est à moitié sur la ligne
 		robot.setLedColor(0, 0, 255)
-		print("a moitie sur la ligne")
-		touchedLine = [(440, 500), (110, 500)]
-		robot.playMelody(touchedLine)
+		print("Est à moitié sur la ligne")
+		touchedLineSong = [(440, 500), (110, 500)]
+		robot.playMelody(touchedLineSong)
 	robot.update()
-	""""
-	robot.enableCamera(True)
+
+	######
 	
-	robot.update()
-	sr = 0
-	sg = 0
-	sb = 0
-	n = 0
-	w = robot.getImageWidth()
-	h = robot.getImageHeight()
-	for x in range(0, w, 10):
-		for y in range(0, h, 10):
-			color = robot.getImagePixelRGB(x, y)
-			sr += color[0]
-			sg += color[1]
-			sb += color[2]
-			n += 1
-	if (n > 0):
-		sr = sr // n
-		sg = sg // n
-		sb = sb // n
-		print("📸 Camera img " + str(w) + "x" + str(h) + " shot after " +
-			str(robot.getImageTimestamp()) + "ms")
-		print("🔴<R>=" + str(sr) + " 🟢<G>=" + str(sg) + " 🔵<B>=" + str(sb))
-		robot.setLedColor(sr, sg, sb)
-
-	print("Face detection")
-	face_cascade = cv2.CascadeClassifier('face_detector.xml')
-	img = cv2.imread('img.jpeg')
-	faces = face_cascade.detectMultiScale(img, 1.1, 4)
-	for (x, y, w, h) in faces :
-		cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
-		cv2.imwrite("img.jpeg", img)
-	print('Enregistré avec succès')
-
-	robot.update()
-
-	#if compteur >= 50:
-	image = pygame.image.load("img.jpeg").convert_alpha()
-	window.blit(image, (0,0))
-	pygame.display.flip()
-	compteur = 0
-	compteur +=1"""
-
 	
 
 pygame.quit()
