@@ -1,0 +1,4 @@
+Installer Visual Studio Code
+Copier le dossier "Ova" vers le PC.
+Installer l'extension Python sur Visual Studio Code
+Installer Python (>11.0) et librairies
