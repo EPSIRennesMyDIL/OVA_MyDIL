@@ -76,7 +76,7 @@ for i in range(50):
 		robot.setLedColor(sr, sg, sb)
 
 	print("Face detection")
-	face_cascade = cv2.CascadeClassifier('face_detector.xml')
+	face_cascade = cv2.CascadeClassifier('ia/face_detector.xml')
 	img = cv2.imread('img.jpeg')
 	faces = face_cascade.detectMultiScale(img, 1.1, 4)
 	for (x, y, w, h) in faces :
