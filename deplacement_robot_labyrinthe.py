@@ -31,7 +31,9 @@ compteur = 50
 while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			run = False    
+			run = False   
+
+	time.sleep(0.01) #Ce délai permet d'obtenir les touches pressées sans (trop de) perte 
 	keyQ = pygame.key.get_pressed()
 
 	### Le problème de lenteur semble venir de la réception des touches sur pygame, 
@@ -79,7 +81,7 @@ while run:
 		print("Est à moitié sur la ligne")
 		touchedLineSong = [(440, 500), (110, 500)]
 		robot.playMelody(touchedLineSong)
-	robot.update()
+	#robot.update()
 
 	######
 	
